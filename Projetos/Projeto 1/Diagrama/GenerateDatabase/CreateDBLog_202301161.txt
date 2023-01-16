@@ -1,0 +1,24 @@
+Generate a Oracle 11g database.
+Date/time: 2023-01-16 11:59
+Database created.
+Add tables
+Add table "TESTE_SETORES"
+Table "TESTE_SETORES" added.
+Added/modified comment for object "idSetor".
+Added/modified comment for object "nomeSetor".
+Added/modified comment for object "idGerente".
+Add table "TESTE_SALARIOS"
+Table "TESTE_SALARIOS" added.
+Added/modified comment for object "niveisSal".
+Added/modified comment for object "salario".
+Add table "TESTE_FUNCIONARIOS"
+Table "TESTE_FUNCIONARIOS" added.
+Added/modified comment for object "idFunc".
+Added/modified comment for object "nomeFunc".
+Added/modified comment for object "telFunc".
+Added/modified comment for object "emailFunc".
+Added/modified comment for object "idSetor".
+Added/modified comment for object "niveisSal".
+Add foreign key constraints
+Constraint "TESTE_FUNCIONARIOS.TESTE_SALARIOS_TESTE_FUNCIONARIOS" added.
+Constraint "TESTE_FUNCIONARIOS.TESTE_SETORES_TESTE_FUNCIONARIOS" added.

@@ -1,0 +1,81 @@
+/* ---------------------------------------------------------------------- */
+/* Script generated with: DeZign for Databases V8.1.2                     */
+/* Target DBMS:           Oracle 11g                                      */
+/* Project file:          Project1.dez                                    */
+/* Project name:                                                          */
+/* Author:                                                                */
+/* Script type:           Database creation script                        */
+/* Created on:            2023-01-16 11:59                                */
+/* ---------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------- */
+/* Add tables                                                             */
+/* ---------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------- */
+/* Add table "TESTE_SETORES"                                              */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE TESTE_SETORES (
+    idSetor NUMBER(2) NOT NULL,
+    nomeSetor VARCHAR2(20) NOT NULL,
+    idGerente NUMBER(2) NOT NULL,
+    PRIMARY KEY (idSetor)
+);
+
+COMMENT ON COLUMN TESTE_SETORES.idSetor IS 'id do setor';
+
+COMMENT ON COLUMN TESTE_SETORES.nomeSetor IS 'nome do setor';
+
+COMMENT ON COLUMN TESTE_SETORES.idGerente IS 'id do chefe do setor';
+
+/* ---------------------------------------------------------------------- */
+/* Add table "TESTE_SALARIOS"                                             */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE TESTE_SALARIOS (
+    niveisSal VARCHAR2(5) CONSTRAINT NN_TESTE_SALARIOS_niveisSal NOT NULL,
+    salario NUMBER(6,2) CONSTRAINT NN_TESTE_SALARIOS_salario NOT NULL,
+    CONSTRAINT PK_TESTE_SALARIOS PRIMARY KEY (niveisSal)
+);
+
+COMMENT ON COLUMN TESTE_SALARIOS.niveisSal IS '''A - R$10000 / B - R$8000 / C - R$6000 / D - R$4000 / E - R$2000 '' ';
+
+COMMENT ON COLUMN TESTE_SALARIOS.salario IS 'Valor do salario';
+
+/* ---------------------------------------------------------------------- */
+/* Add table "TESTE_FUNCIONARIOS"                                         */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE TESTE_FUNCIONARIOS (
+    idFunc NUMBER(3) NOT NULL,
+    nomeFunc VARCHAR2(60) NOT NULL,
+    telFunc NUMBER(9),
+    emailFunc VARCHAR2(256) NOT NULL,
+    idSetor NUMBER(2) NOT NULL,
+    niveisSal VARCHAR2(5) NOT NULL,
+    CONSTRAINT PK_TESTE_FUNCIONARIOS PRIMARY KEY (idFunc)
+);
+
+COMMENT ON COLUMN TESTE_FUNCIONARIOS.idFunc IS 'id do funcionário';
+
+COMMENT ON COLUMN TESTE_FUNCIONARIOS.nomeFunc IS 'nome do funcionário';
+
+COMMENT ON COLUMN TESTE_FUNCIONARIOS.telFunc IS 'telefone do funcionario';
+
+COMMENT ON COLUMN TESTE_FUNCIONARIOS.emailFunc IS 'email do funcionário';
+
+COMMENT ON COLUMN TESTE_FUNCIONARIOS.idSetor IS 'id do setor';
+
+COMMENT ON COLUMN TESTE_FUNCIONARIOS.niveisSal IS 'nivel de salario';
+
+/* ---------------------------------------------------------------------- */
+/* Add foreign key constraints                                            */
+/* ---------------------------------------------------------------------- */
+
+ALTER TABLE TESTE_FUNCIONARIOS ADD CONSTRAINT TESTE_SALARIOS_TESTE_FUNCIONARIOS 
+    FOREIGN KEY (niveisSal) REFERENCES TESTE_SALARIOS (niveisSal);
+
+ALTER TABLE TESTE_FUNCIONARIOS ADD CONSTRAINT TESTE_SETORES_TESTE_FUNCIONARIOS 
+    FOREIGN KEY (idSetor) REFERENCES TESTE_SETORES (idSetor);
