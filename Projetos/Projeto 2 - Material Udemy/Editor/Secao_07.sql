@@ -1,9 +1,10 @@
-
+  --
   SELECT COD_CONTRATO, DATA, TOTAL
   FROM TCONTRATO
-  WHERE TOTAL >
+  WHERE TOTAL >=
    ( SELECT VALOR FROM TCURSO
-     WHERE COD_CURSO = 2 );
+     WHERE COD_CURSO = 3 );
+
 
   -- Errado (Só pode retornar 1
   -- linha na subconsulta)
@@ -13,7 +14,7 @@
     ( SELECT VALOR FROM TCURSO
       WHERE VALOR > 500 );
 
-  SELECT * from TALUNO;
+  SELECT * from TALUNO
 
   --Todos os Alunos da mesma cidade do Aluno 1,
   --Menos o Aluno 1
@@ -33,7 +34,7 @@
               WHERE COD_ALUNO = 1 )
   AND COD_ALUNO <> 1 ;
 
-  SELECT * FROM TALUNO;
+  SELECT * FROM TALUNO
 
   --Soma todos os itens, e mostra somente cujo o
   --valor minimo seja maior que o valor medio
@@ -62,7 +63,7 @@
   --Item (Vendidos)
   SELECT COD_CURSO, NOME, VALOR
   FROM TCURSO
-  WHERE COD_CURSO IN (SELECT COD_CURSO FROM TITEM);
+  WHERE COD_CURSO IN (SELECT COD_CURSO FROM TITEM)
 
 
   --Todos os Cursos que nao Estao na Tabela de Item
@@ -70,7 +71,7 @@
   SELECT COD_CURSO, NOME, VALOR
   FROM TCURSO
   WHERE COD_CURSO NOT IN (SELECT COD_CURSO FROM TITEM)
-  ORDER BY NOME;
+  ORDER BY NOME
 
 
   -----Codigo equivalente a subselect
@@ -92,7 +93,7 @@
   --pelo valor padrao
   SELECT * FROM TITEM
   WHERE (COD_CURSO, VALOR) IN
-        (SELECT COD_CURSO, VALOR FROM TCURSO);
+        (SELECT COD_CURSO, VALOR FROM TCURSO)
 
 
   --SubConsulta na clausula From

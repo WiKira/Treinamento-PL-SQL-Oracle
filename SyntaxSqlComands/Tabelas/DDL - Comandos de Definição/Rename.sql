@@ -1,0 +1,4 @@
+
+--Alterar nome da tabela
+RENAME NOME_DA_TABELA
+  TO NOVO_NOME_DA_TABELA;
