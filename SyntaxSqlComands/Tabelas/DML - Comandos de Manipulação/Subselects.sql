@@ -1,0 +1,8 @@
+
+--Subselect Simples
+  SELECT NOME_DA_COLUNA
+  FROM NOME_DA_TABELA
+  WHERE...  >
+   ( SELECT NOME_DA_COLUNA
+       FROM NOME_DA_TABELA
+      WHERE...);
