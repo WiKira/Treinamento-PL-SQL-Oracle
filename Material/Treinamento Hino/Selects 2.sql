@@ -1,4 +1,4 @@
--- Todas as empresas sem repetição (todas do select superior e as do inferior que não estiverem no superior)
+-- Todas as empresas sem repetiï¿½ï¿½o (todas do select superior e as do inferior que nï¿½o estiverem no superior)
 SELECT DISTINCT FSNFENTRADA.CODEMPRESA, GEEMPRESA.RAZAOSOCIAL 
   FROM FSNFENTRADA, GEEMPRESA
  WHERE GEEMPRESA.CODEMPRESA = FSNFENTRADA.CODEMPRESA
@@ -8,7 +8,7 @@ SELECT FSNFSAIDA.CODEMPRESA, GEEMPRESA.RAZAOSOCIAL
  WHERE GEEMPRESA.CODEMPRESA = FSNFSAIDA.CODEMPRESA
  GROUP BY FSNFSAIDA.CODEMPRESA, GEEMPRESA.RAZAOSOCIAL 
  
--- Todas as empresas com repetição (todas do select superior e todas do inferior )
+-- Todas as empresas com repetiï¿½ï¿½o (todas do select superior e todas do inferior )
 SELECT DISTINCT FSNFENTRADA.CODEMPRESA, GEEMPRESA.RAZAOSOCIAL 
   FROM FSNFENTRADA, GEEMPRESA
  WHERE GEEMPRESA.CODEMPRESA = FSNFENTRADA.CODEMPRESA
@@ -152,5 +152,5 @@ SELECT CODEMPRESA,
        UPPER('teste'),
        LOWER(RAZAOSOCIAL),
        INITCAP('epis horizont equipamentos de seguranca ltda'),
-       TRIM(RAZAOSOCIAL || '  ') -- REMOVE ESPAÇOES
+       TRIM(RAZAOSOCIAL || '  ') -- REMOVE ESPAï¿½OES
   FROM GEEMPRESA
