@@ -53,4 +53,6 @@ SELECT SUM(NOME_DA_COLUNA)
 
 
 
+
+
  
