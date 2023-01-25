@@ -1,0 +1,56 @@
+
+DECLARE
+    X INTEGER;
+    Y INTEGER;
+    C INTEGER;
+BEGIN
+    X := 100;
+    Y := 500;
+    C := X+Y;
+    
+    Dbms_Output.Put_Line('RESULTADO: ' || C);
+   
+END;
+
+
+DECLARE 
+  VDESCONTO NUMBER(6,2) := 0.5;
+  VCIDADE VARCHAR(30) := 'NOVO HAMBURGO';
+  VCOD_ALUNO TALUNO2.COD_ALUNO%TYPE := 5;
+  VTOTAL NUMBER(8,2) := 1345.89;
+  
+  BEGIN
+    VTOTAL := ROUND(VTOTAL*VDESCONTO, 2);
+    DBMS_OUTPUT.PUT_LINE('Total: '||VTOTAL);
+    VDESCONTO := 1.2;
+    --VCIDADE := VCIDADE);
+    Dbms_Output.Put_Line('CIDADE: ' || INITCAP(VCIDADE));
+    DBMS_OUTPUT.PUT_LINE('DESCONTO: ' || VDESCONTO);
+    DBMS_OUTPUT.PUT_LINE('ALUNO: ' || VCOD_ALUNO);
+  END;
+  
+DECLARE
+   VPRECO1 NUMBER(8,2) := 10;
+   VPRECO2 NUMBER(8,2) := 20;
+   VFLAG BOOLEAN;
+BEGIN
+   VFLAG := (VPRECO1>VPRECO2);
+   IF (VFLAG = TRUE) THEN
+    Dbms_Output.Put_Line('VERDADEIRO');
+   ELSE
+    Dbms_Output.Put_Line('FALSO');
+   END IF;
+   IF (VPRECO1 > VPRECO2) THEN
+    Dbms_Output.Put_Line('VPREÇO1 É MAIOR QUE VPREÇO2');
+   ELSE
+    Dbms_Output.Put_Line('VPREÇO2 É MAIOR QUE VPREÇO1');
+   END IF;
+END;
+
+
+
+
+  
+  
+  
+  
