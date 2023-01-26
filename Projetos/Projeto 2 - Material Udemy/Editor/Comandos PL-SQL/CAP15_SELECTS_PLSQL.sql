@@ -1,176 +1,154 @@
 
+--SELECT COM BLOCO ANONIMO COM APENAS 1 REGISTRO DE RETORNO (VARCHAR E NUMBER)
 DECLARE
-  vValor NUMBER(8, 2);
-  vNome  VARCHAR2(30);
+    VVALOR NUMBER (8,2);
+    VNOME VARCHAR2(30); 
 BEGIN
-  SELECT valor, nome
-  INTO   vValor, vNome
-  FROM   tcurso
-  WHERE  cod_curso = &cod_Curso;
-
-  Dbms_Output.Put_Line('Valor: '|| To_Char(vValor,'fm9999.99'));
-
-  Dbms_Output.Put_Line('Curso: '|| InitCap(vNome));
-END;
-
-SELECT * FROM TCurso;
-
-
-
-
-DECLARE
-   vDt_compra  tcontrato.Data%TYPE;
-   vDt_curso   tcontrato.Data%TYPE;
-BEGIN
-   SELECT data, data + 10
-   INTO   vDt_compra, vDt_curso
-   FROM   tcontrato
-   WHERE  cod_contrato = &Contrato;
-   Dbms_Output.Put_Line('Data Compra: '||vDt_compra);
-   Dbms_Output.Put_Line('Data Curso: '||vDt_curso);
-END;
-
-SELECT * FROM TCONTRATO;
-
-
-
-SELECT Max(COD_CONTRATO) FROM TCONTRATO;
-CREATE SEQUENCE SEQ_CONTRATO1 START WITH 11;
---
-DECLARE
-  vCod tcontrato.cod_contrato%TYPE;
-BEGIN
-  SELECT SEQ_CONTRATO1.NEXTVAL
-  INTO   vCod FROM   Dual;
-
-  INSERT INTO TContrato(COD_CONTRATO, DATA,
-                        COD_ALUNO, DESCONTO)
-  VALUES(vCod, SYSDATE, 2, NULL);
-
-  Dbms_Output.Put_Line('Criado Contrato: '||vCod);
+    SELECT VALOR,  NOME
+     INTO VVALOR, VNOME
+      FROM TCURSO2
+     WHERE COD_CURSO = &COD_CURSO;
+     Dbms_Output.Put_Line('VALOR: ' || TO_CHAR(VVALOR,'FM9999.99'));
+     Dbms_Output.Put_Line('CURSO: ' || INITCAP(VNOME));
 END;
 
 
-
---Pegar o valor atual
-SELECT Seq_Contrato1.CURRVAL FROM Dual;
-
-SELECT * FROM TCONTRATO;
+SELECT * 
+  FROM TCURSO2
+  ORDER BY COD_CURSO;
 
 
------Update
+--SELECT COM BLOCO ANONIMO COM APENAS 1 REGISTRO DE RETORNO (DATA)
 DECLARE
-  vValor TCurso.Valor%TYPE := &Valor;
+    VDT_COMPRA TCONTRATO2.DATA%TYPE;
+    VDT_CURSO TCONTRATO2.DATA%TYPE;
 BEGIN
-  UPDATE tcurso SET
-  Valor = Valor + vValor
-  WHERE  carga_horaria >= 25;
-END;
---
-SELECT * FROM tcurso;
-
------Delete
-DECLARE
-  vContrato TContrato.COD_CONTRATO%TYPE := &contrato;
-BEGIN
-  DELETE FROM TContrato
-  WHERE  Cod_Contrato = vContrato;
+    SELECT  DATA    , DATA + 10
+      INTO VDT_COMPRA , VDT_CURSO
+      FROM TCONTRATO2
+     WHERE COD_CONTRATO = &CONTRATO;
+     Dbms_Output.Put_Line('DATA DA COMPRA: ' || VDT_COMPRA);
+     Dbms_Output.Put_Line('DATA DO CURSO: ' || VDT_CURSO);
 END;
 
-SELECT * FROM tcontrato;
+SELECT *
+  FROM TCONTRATO2;
+  
+  
+SELECT MAX(COD_CONTRATO) FROM TCONTRATO2;
+
+CREATE SEQUENCE SEQ_CONTRATO2 START WITH 8;
+
+DROP SEQUENCE SEQ_CONTRATO1;
 
 
--- Erro No_Data_Found
--- Select Into que nao encontra registros
+-- BLOCO ANONIMO INSERINDO DADOS COM SEQUENCE
 DECLARE
-   vdt_compra    tcontrato.data%TYPE;
-   vTotal       tcontrato.total%TYPE;
-   vDt_atual    DATE := SYSDATE;
+    VCOD_CONTRATO TCONTRATO2.COD_CONTRATO%TYPE;
 BEGIN
-   SELECT data, total
-   INTO   vdt_compra, vTotal
-   FROM   tcontrato WHERE  Data = vDt_atual;	--
-   Dbms_Output.Put_Line('Resultado Select');
+    SELECT SEQ_CONTRATO2.NEXTVAL
+    INTO VCOD_CONTRATO
+    FROM DUAL;
+    
+    INSERT INTO TCONTRATO2(COD_CONTRATO, DATA, COD_ALUNO, DESCONTO)
+    VALUES (VCOD_CONTRATO, SYSDATE, 2, NULL);
+    COMMIT;
+    
+    Dbms_Output.Put_Line('CRIADO CONTRATO: ' || VCOD_CONTRATO);
+END;
+
+SELECT Seq_Contrato2.CURRVAL 
+  FROM Dual;
+  
+SELECT *
+  FROM TCONTRATO2
+  ORDER BY COD_CONTRATO;
+ 
+DELETE TCONTRATO2
+  WHERE COD_CONTRATO > 10;
+  
+DROP SEQUENCE SEQ_CONTRATO2;
+
+CREATE SEQUENCE SEQ_CONTRATO2 START WITH 11;
+
+
+--BLOCO ANONIMO COM UPDATE
+DECLARE
+   VVALOR TCURSO2.VALOR%TYPE := &VALOR;
+BEGIN
+   UPDATE TCURSO2
+     SET VALOR = VALOR+VVALOR
+     WHERE CARGA_HORARIA >= 30;
+END;
+
+SELECT *
+  FROM TCURSO2
+  WHERE CARGA_HORARIA >= 30;
+ 
+
+--INSERT BLOCO ANONIMO SEM COMMIT = NÃO APARECE NO SELECT
+BEGIN
+   INSERT INTO TALUNO2 VALUES (1001,'ENZO','ARTUR NOGUEIRA','13160-354','SP',3000,'21/09/2004');
+END;
+
+--INSERT  BLOCO ANONIMO COM COMMIT = APARECE NO SELECT
+BEGIN
+   INSERT INTO TALUNO2 VALUES (1002,'ENZO','ARTUR NOGUEIRA','13160-354','SP',3000,'21/09/2004');
+   commit;
+END;
+
+--INSERT FORA DO BLOCO ANONIMO APARECE NO SELECT
+INSERT INTO TALUNO2 VALUES (1003,'ENZO','ARTUR NOGUEIRA','13160-354','SP',3000,'21/09/2004');
+
+SELECT *
+  FROM TALUNO2;
+
+DELETE TALUNO2
+  WHERE COD_ALUNO > 1000;
+
+
+--BLOCO ANONIMO COM DELETE
+DECLARE
+   VCONTRATO TCONTRATO2.COD_CONTRATO%TYPE := &CONTRATO;
+BEGIN
+   DELETE FROM TCONTRATO2
+   WHERE COD_CONTRATO = VCONTRATO;
+   COMMIT;
+END;
+
+SELECT *
+  FROM TCONTRATO2
+  ORDER BY COD_CONTRATO;
+
+
+--ERRO NO_DATA_FOUND
+
+DECLARE
+   VDT_COMPRA    TCONTRATO2.DATA%TYPE;
+   VTOTAL       TCONTRATO2.TOTAL%TYPE;
+   VDT_ATUAL    DATE := SYSDATE;
+BEGIN
+   SELECT DATA, TOTAL
+   INTO   VDT_COMPRA, VTOTAL
+   FROM   TCONTRATO2 
+   WHERE  DATA = VDT_ATUAL;	
 END;
 
 
-
-
-
-
-
 DECLARE
-   vContrato   NUMBER := &cod_contrato;
-   vtexto VARCHAR2(50);
+   VCONTRATO NUMBER := &COD_CONTRATO;
+   VTEXTO VARCHAR2(50);
 BEGIN
-  UPDATE TContrato SET
-  desconto = desconto + 2
-  WHERE Cod_Contrato = VContrato;
-
-  vtexto := SQL%ROWCOUNT;
-  --Retorna qtde de registros afetados
-  --pelo comando sql
-
-  Dbms_Output.Put_Line(vtexto|| ' linhas atualizadas.');
+   UPDATE TCONTRATO2
+    SET DESCONTO = DESCONTO - 2
+    WHERE COD_CONTRATO >= VCONTRATO;
+    
+    --SQL%ROWCOUNT RETORNA A QTDE DE REGISTROS AFETADOS PELO COMANDO SQL
+    VTEXTO := SQL%ROWCOUNT;
+    
+    Dbms_Output.Put_Line(VTEXTO || ' LINHAS ATUALIZADAS.');
+    COMMIT;
 END;
 
---
-
---- Exercicios   --- Pagina 95
-
-
-
-1)
-DECLARE
-   vCod NUMBER;
-BEGIN
-   SELECT max(cod_depto) INTO vCod
-   FROM   tdepartamento;
-   Dbms_Output.Put_Line(vCod);
-END;
-
-2)
-DECLARE
-   vCod NUMBER;
-BEGIN
-   SELECT max(cod_depto) INTO vCod
-   FROM   tdepartamento;
-   vCod := vCod + 10;
-   INSERT INTO tdepartamento  (cod_depto, nome, loca)
-   VALUES (vCod, '&nome', NULL);
-   Dbms_Output.Put_Line(vCod);
-END;
-
-
-3)
-DECLARE
-  vNome TDEPARTAMENTO.NOME%TYPE;
-  vLocal TDEPARTAMENTO.LOCAL%TYPE;
-BEGIN
-  UPDATE TDEPARTAMENTO SET
-  NOME = '&NOME'   ,
-  LOCAL = '&LOCAL'
-  WHERE COD_DEPTO = &cod_depto;
-  --
-  --SELECT NOME,LOCAL INTO vNome, vLocal
-  --FROM TDEPARTAMENTO
-  --WHERE COD_DEPTO = &cod_depto;
-  --
-  Dbms_Output.Put_Line('Departamento: '||vNome);
-  Dbms_Output.Put_Line('Local: '||vLocal);
-END;
-
-4)
-DECLARE
-  vQtde VARCHAR(10);
-BEGIN
-  DELETE FROM TDEPARTAMENTO
-  WHERE COD_DEPTO = &cod_depto;
-  vQtde := SQL%ROWCOUNT;
-  Dbms_Output.Put_Line('Registros deletados: '|| vQtde);
-END;
-
-
-
-
-
+SELECT *
+  FROM TCONTRATO2;

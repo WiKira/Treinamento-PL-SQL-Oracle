@@ -1,4 +1,43 @@
 
+--RECORD 
+DECLARE
+    TYPE REC_ALUNO IS RECORD
+    ( 
+     COD_ALUNO NUMBER NOT NULL:= 0,
+     NOME TALUNO2.NOME%TYPE,
+     CIDADE TALUNO2.CIDADE%TYPE 
+     );
+      
+      REGISTRO REC_ALUNO;
+BEGIN
+
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 DECLARE
    --

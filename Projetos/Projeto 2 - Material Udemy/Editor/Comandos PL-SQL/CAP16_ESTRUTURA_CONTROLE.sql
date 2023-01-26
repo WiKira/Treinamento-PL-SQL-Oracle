@@ -1,105 +1,78 @@
+
+--IF, ELSE, ELSIF
 DECLARE
-  vNome VARCHAR(30) := 'Outro';
-  vCidade VARCHAR(30);     vEstado VARCHAR(2) := 'RS';
+   VNOME VARCHAR(30) := '&NOME';
+   VCIDADE VARCHAR(30);
+   VESTADO VARCHAR(2);
 BEGIN
-  IF (vNome = 'Gaucho') THEN
-    vCidade := 'Porto Alegre';    vEstado := 'RS';
-  ELSIF (vNome = 'Carioca') THEN
-    vCidade := 'Rio de Janeiro';  vEstado := 'RJ';
-  ELSIF (vNome = 'Acreano') OR (vNome = 'Amapa') THEN
-    vCidade := 'Nao existe';      vEstado := 'AC';
-  ELSE
-    IF (vEstado<>'RS') THEN
-      vCidade := 'Estrangeiro';
-      vEstado := 'XX';
-    ELSE
-      vCidade := 'Pelotas';
-      vEstado := 'RS';
+   IF (VNOME = 'GAUCHO') THEN
+     VCIDADE := 'PORTO ALEGRE';
+     VESTADO := 'RS';
+   ELSIF (VNOME = 'PAULISTA') THEN
+     VCIDADE := 'SÃO PAULO';
+     VESTADO := 'SP';
+   ELSE
+      IF (VESTADO = 'SP') THEN
+         VCIDADE := 'PAULISTA';
+      ELSE
+        VCIDADE := 'OUTROS';
+        VESTADO := 'XX';
+      END IF;
     END IF;
-  END IF;
-  Dbms_Output.Put_Line(vCidade||' - '||vEstado);
+    Dbms_Output.Put_Line(VCIDADE || ' - ' || VESTADO);
 END;
 
---
--- Case When
---
+--CASE WHEN
 DECLARE
-  vEstado VARCHAR(2) := 'RR';
-  vNome VARCHAR(30);
+   VESTADO VARCHAR(2) := '&N';
+   VNOME VARCHAR (30);
 BEGIN
-  CASE
-    WHEN vEstado ='RS' THEN vNome := 'Gaucho';
-    WHEN vEstado ='RJ' OR vEstado='ES' THEN vNome := 'Carioca';
-  ELSE
-    vNome := 'Outros';
-  END CASE;
-  Dbms_Output.Put_Line('Apelido: '||vNome);
+   CASE
+     WHEN VESTADO = 'RS' THEN VNOME := 'GAUCHO';
+     WHEN VESTADO = 'RJ' OR VESTADO = 'rj' THEN VNOME := 'CARIOCA';
+   ELSE
+     VNOME := 'OUTROS';
+   END CASE;
+   Dbms_Output.Put_Line('APELIDO: ' || VNOME);
 END;
---
 
 
-
-
-
---Laço de repetição 1 até 10
+--ESTRUTURA LOOP
 DECLARE
   vContador INTEGER := 0;
 BEGIN
   LOOP
-    vContador := vContador + 1;
+    vContador  := VCONTADOR + 1;
     Dbms_Output.Put_Line(vContador);
     EXIT WHEN vContador = 10;
   END LOOP;
   Dbms_Output.Put_Line('Fim do LOOP');
 END;
 
---Laço de repetição 10 até 1
+
+--ESTRUTURA FOR
 DECLARE
-  vContador INTEGER := 10;
+  VCONTADOR INTEGER;
 BEGIN
-  LOOP
-    vContador := vContador - 1;
-    Dbms_Output.Put_Line(vContador);
-    EXIT WHEN vContador = 0;
-  END LOOP;
-  Dbms_Output.Put_Line('Fim do LOOP');
+   FOR VCONTADOR IN 1..10
+   LOOP
+    Dbms_Output.Put_Line(VCONTADOR);
+   END LOOP;
 END;
 
-
-
-
-
-
---For loop -> mais indicado para laços em tabelas
+--WHILE LOOP
 DECLARE
-  vContador INTEGER;
+   VCONTADOR INTEGER := 0;
+   VTEXTO VARCHAR (10);
 BEGIN
-  FOR vContador in 1..10
-  LOOP
-    --vContador := vContador + 1;
-    Dbms_Output.Put_Line(vContador);
-    --EXIT WHEN vContador = 5;
-  END LOOP;
+   WHILE VCONTADOR < 10
+   LOOP
+     VCONTADOR := VCONTADOR + 1;
+     IF (VCONTADOR MOD 2)=0 THEN
+        VTEXTO := 'PAR';
+     ELSE 
+        VTEXTO := 'IMPAR';
+     END IF;
+     Dbms_Output.Put_Line(VCONTADOR || ' -> ' || VTEXTO);
+   END LOOP;
 END;
-
-
---While Loop
-DECLARE
-  vContador INTEGER := 0;
-  vTexto VARCHAR(10);
-BEGIN
-  WHILE vContador < 10
-  LOOP
-    vContador := vContador + 1;
-    IF (vContador Mod 2)=0 THEN
-      vTexto := 'Par';
-    ELSE
-      vTexto := 'Impar';
-    END IF;
-    Dbms_Output.Put_Line(vContador|| ' -> '||vTexto);
-  END LOOP;
-END;
-
-
-
-
