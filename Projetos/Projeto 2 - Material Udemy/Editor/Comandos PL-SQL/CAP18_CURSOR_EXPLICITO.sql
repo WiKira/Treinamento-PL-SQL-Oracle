@@ -1,99 +1,98 @@
 
+--CURSOR SIMPLES
 DECLARE
-   vcod_aluno TAluno.Cod_Aluno%TYPE;
-   vNome   TAluno.nome%TYPE;
-   CURSOR c1 IS
-     SELECT cod_aluno, nome
-     FROM   taluno;
-
+   VCOD_ALUNO TALUNO2.COD_ALUNO%TYPE;
+   VNOME   TALUNO2.NOME%TYPE;
+   CURSOR C1 IS
+     SELECT COD_ALUNO, NOME
+     FROM   TALUNO2;
 BEGIN
-   OPEN c1; -- abre cursor
+   OPEN C1; -- ABRE CURSOR
    LOOP
-      FETCH c1 INTO vCod_Aluno, vNome;  --pega registro atual
-      EXIT WHEN c1%ROWCOUNT > 10 OR c1%NOTFOUND;
-      Dbms_Output.Put_Line('Codigo: '||
-        LPad(vcod_aluno,4,'0')||' - '||'Nome: '||vNome);
+      FETCH C1 INTO VCOD_ALUNO, VNOME;  --PEGA REGISTRO A REGISTRO E ATRIBUI AS RESPECTIVAS VARIAVEIS
+      EXIT WHEN C1%ROWCOUNT >= 10 OR C1%NOTFOUND;
+      DBMS_OUTPUT.PUT_LINE('Codigo: '||
+        LPAD(VCOD_ALUNO,4,'0')||' - '||'Nome: '||VNOME);
    END LOOP;
-   CLOSE c1; --fecha cursor
+   CLOSE C1; --FECHA CURSOR
 END;
 
 
-
---
-
+--CURSOR + RECORD
 DECLARE
-   CURSOR c1 IS
-      SELECT * FROM TAluno;
-   Reg c1%ROWTYPE;  --record
+   CURSOR C1 IS
+      SELECT * FROM TALUNO2;
+   REG C1%ROWTYPE;  --RECORD
 BEGIN
-   OPEN c1; --
+   OPEN C1;--ABRE CURSOR
    LOOP
-      FETCH c1 INTO reg;
-      EXIT WHEN c1%ROWCOUNT > 10 OR c1%NOTFOUND;
-      Dbms_Output.Put_Line('Codigo: '||
-                  LPad(reg.cod_aluno,5,'0')||'-'||
-                 'Nome: '||reg.nome);
+      FETCH C1 INTO REG;
+      EXIT WHEN C1%ROWCOUNT >= 10 OR C1%NOTFOUND;
+      DBMS_OUTPUT.PUT_LINE('Codigo: '||
+                  LPAD(REG.COD_ALUNO,5,'0')||'-'||
+                 'Nome: '||REG.NOME);
    END LOOP;
-   CLOSE c1; --
+   CLOSE C1; --FECHA CURSOR
 END;
---
 
 
------
+--CURSOR + RECORD + FOR
 DECLARE
-  CURSOR c1 IS
-    SELECT * FROM TAluno;
-  Reg TAluno%ROWTYPE;
+  CURSOR C1 IS
+    SELECT * FROM TALUNO2;
+  REG TALUNO2%ROWTYPE;
 BEGIN
-  FOR reg IN c1  --open, laço, fetch, close, exit when
+  FOR REG IN C1  --EQUIVALE A: OPEN CURSOR, LAÇO, FETCH, CLOSE CURSOR, EXIT WHEN
   LOOP
-    Dbms_Output.Put_Line('Codigo: '||
-       LPad(reg.cod_aluno,5,'0')||' - ' || 'Nome: '||reg.nome);
-  END LOOP;
-END;
---
-DECLARE
-  Reg TALUNO%ROWTYPE;
-BEGIN
-  FOR reg IN (SELECT * FROM TALUNO)
-  LOOP
-    Dbms_Output.Put_Line(reg.cod_aluno ||' - ' || reg.nome);
+    DBMS_OUTPUT.PUT_LINE('Codigo: '||
+       LPAD(REG.COD_ALUNO,5,'0')||' - ' || 'Nome: '||REG.NOME);
   END LOOP;
 END;
 
 
----
----
+--SELECT DIRETO + RECORD + FOR (PARA COMANDOS DE QUERY CURTOS)
 DECLARE
-  CURSOR c1 (pCod_aluno NUMBER) IS
-    SELECT * FROM TAluno
-    WHERE Cod_aluno = pCod_aluno
-   FOR UPDATE OF NOME NOWAIT;
-  --bloquea a coluna nome para alteracao
-  Reg c1%ROWTYPE;
+  REG TALUNO%ROWTYPE;
 BEGIN
-  OPEN c1(&codigo);
-  FETCH c1 INTO reg;
-  Dbms_Output.Put_Line(reg.cod_aluno ||' - ' || reg.nome);
-  CLOSE c1; --libera o registro para alteracao
+  FOR REG IN (SELECT * FROM TALUNO)
+  LOOP
+    DBMS_OUTPUT.PUT_LINE(REG.COD_ALUNO ||' - ' || REG.NOME);
+  END LOOP;
 END;
---
+
+
+--CURSOR COM PARAMETROS - SEM LAÇO COM APENAS 1 RESULTADO
+DECLARE
+  CURSOR C1 (PCOD_ALUNO NUMBER) IS
+    SELECT * FROM TALUNO2
+    WHERE COD_ALUNO = PCOD_ALUNO
+   FOR UPDATE OF NOME NOWAIT; --BLOQUEIA A COLUNA NOME PARA ALTERACAO
+  
+  REG C1%ROWTYPE;
+BEGIN
+  OPEN C1(&CODIGO);
+  FETCH C1 INTO REG;
+  DBMS_OUTPUT.PUT_LINE(REG.COD_ALUNO ||' - ' || REG.NOME || ' - ' || REG.CIDADE);
+  CLOSE C1; --LIBERA O REGISTRO PARA ALTERACAO
+END;
 
 
 
 DECLARE
-   CURSOR c1 IS
-     SELECT * FROM TALUNO
+   CURSOR C1 IS
+     SELECT * FROM TALUNO2
      FOR UPDATE;
-   Reg_aluno c1%ROWTYPE;
+   REG_ALUNO C1%ROWTYPE;
 BEGIN
-   FOR reg_aluno IN c1
+   FOR REG_ALUNO IN C1
    LOOP
-      UPDATE TALUNO
-      SET    nome = InitCap(reg_aluno.nome)
-      WHERE CURRENT OF c1;  --bloqueia somente o reg atual
-      Dbms_Output.Put_Line('Nome: '||InitCap(reg_aluno.nome));
+      UPDATE TALUNO2
+      SET    NOME = INITCAP(REG_ALUNO.NOME)
+      WHERE CURRENT OF C1;  --BLOQUEIA SOMENTE O REG ATUAL
+      DBMS_OUTPUT.PUT_LINE('Nome: '||INITCAP(REG_ALUNO.NOME));
    END LOOP;
    COMMIT;
 END;
 
+SELECT *
+  FROM TALUNO2;

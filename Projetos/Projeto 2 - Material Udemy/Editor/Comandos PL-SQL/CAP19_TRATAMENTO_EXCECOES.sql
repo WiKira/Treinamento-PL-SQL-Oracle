@@ -1,34 +1,39 @@
+
 DECLARE
-  vCod   taluno.cod_aluno%TYPE := 566;
-  vCidade taluno.cidade%TYPE;    x NUMBER;
+  VCOD   TALUNO2.COD_ALUNO%TYPE := 1;
+  VCIDADE TALUNO2.CIDADE%TYPE;    
+  X NUMBER;
 BEGIN
-  SELECT Cidade INTO vCidade
-  FROM TAluno
-  WHERE nome LIKE '%';
-  --WHERE  cod_aluno = vCod;
+  SELECT CIDADE INTO VCIDADE
+  FROM TALUNO2
+  --WHERE NOME LIKE '%';
+  WHERE  cod_aluno = vCod;
   X := 0 / 0;
-  Dbms_Output.Put_Line('Cidade: '||vCidade);
+  DBMS_OUTPUT.PUT_LINE('Cidade: '||VCIDADE);
 EXCEPTION
-  WHEN no_data_found THEN
+  WHEN NO_DATA_FOUND THEN
     RAISE_APPLICATION_ERROR(-20001,
            'Aluno Inexistente! '||SQLCODE||' '||SQLERRM);
-  WHEN too_many_rows THEN
+  WHEN TOO_MANY_ROWS THEN
     RAISE_APPLICATION_ERROR(-20002,
            'Registro Duplicado! '||SQLCODE||' '||SQLERRM);
-  WHEN others THEN
-    RAISE_APPLICATION_ERROR(-20003,
+  WHEN ZERO_DIVIDE THEN 
+    RAISE_APPLICATION_ERROR (-20003,
+           'Não há divisão por 0! ' || SQLCODE || ' ' || SQLERRM);
+  WHEN OTHERS THEN
+    RAISE_APPLICATION_ERROR(-20004,
            'Exceção Desconhecida! '||SQLCODE||' '||SQLERRM);
 END;
 
 
---SELECT * FROM taluno
+SELECT * FROM TALUNO2;
 
 CREATE TABLE CONTAS
 (
-  Codigo     INTEGER NOT NULL PRIMARY KEY,
-  Valor      NUMBER(10, 2),
-  Juros      NUMBER(10, 2),
-  Vencimento DATE
+  CODIGO     INTEGER NOT NULL PRIMARY KEY,
+  VALOR      NUMBER(10, 2),
+  JUROS      NUMBER(10, 2),
+  VENCIMENTO DATE
 );
 
 INSERT INTO CONTAS VALUES (100, 550, 50, SYSDATE-10);
@@ -38,38 +43,36 @@ SELECT * FROM CONTAS;
 COMMIT;
 
 
-
-
---
+--CRIANDO EXCEPTION
 DECLARE
-   vDt_vencimento DATE;
-   vConta  NUMBER := 100; --codigo da conta
-   eConta_vencida EXCEPTION;
+   VDT_VENCIMENTO DATE;
+   VCONTA  NUMBER := 100; --CODIGO DA CONTA
+   ECONTA_VENCIDA EXCEPTION;
 BEGIN
-  SELECT vencimento INTO vDt_vencimento
-  FROM CONTAS WHERE codigo = vConta;
-  IF vDt_vencimento < TRUNC(SYSDATE) THEN
-    RAISE eConta_vencida;
+  SELECT VENCIMENTO INTO VDT_VENCIMENTO
+  FROM CONTAS WHERE CODIGO = VCONTA;
+  IF VDT_VENCIMENTO < TRUNC(SYSDATE) THEN
+    RAISE ECONTA_VENCIDA;
   END IF;
  EXCEPTION
-  WHEN eConta_vencida THEN
-    Dbms_Output.Put_Line('Conta vencida');
-    UPDATE contas SET valor = valor + juros
-    WHERE  codigo = vConta;
+  WHEN ECONTA_VENCIDA THEN
+    DBMS_OUTPUT.PUT_LINE('Conta vencida');
+    UPDATE CONTAS SET VALOR = VALOR + JUROS
+    WHERE  CODIGO = VCONTA;
+    COMMIT;
 END;
 
 --VALOR MUDA PARA 600
-SELECT * FROM contas
+SELECT * FROM CONTAS;
 
----
----
+
 DECLARE
-   eFk_Erro EXCEPTION;
-   PRAGMA EXCEPTION_INIT(eFk_Erro, -02291);
+   EFK_ERRO EXCEPTION;
+   PRAGMA EXCEPTION_INIT(EFK_ERRO, -02291);
 BEGIN
   INSERT INTO TBAIRRO VALUES ( 100, 100, 'RIO BRANCO');
 EXCEPTION
-   WHEN eFk_erro THEN
+   WHEN EFK_ERRO THEN
      RAISE_APPLICATION_ERROR(-20200, 'Cidade não existe!' );
 END;
 ----

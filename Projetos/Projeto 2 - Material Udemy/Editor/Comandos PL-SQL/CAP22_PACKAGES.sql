@@ -1,86 +1,90 @@
---Especificação ou declaração
+--ESPECIFICAÇÃO OU DECLARAÇÃO
 CREATE OR REPLACE PACKAGE PKG_ALUNO
 IS
-  vCIDADE VARCHAR2(30);  --Variaveis publicas
-  vMedia NUMBER(8,2);    --Variaveis publicas
-  vNOME VARCHAR2(30);    --Variaveis publicas
-  PROCEDURE DELETA_ALUNO(pCOD_ALUNO NUMBER);
-  PROCEDURE MEDIA_CONTRATOS;
-  PROCEDURE CON_ALUNO(pCOD_ALUNO NUMBER);
+  VCIDADE VARCHAR2 (30); --VAR PUBLICA
+  VMEDIA NUMBER (8,2); --VAR PUBLICA
+  VNOME VARCHAR2 (30); --VAR PUBLICA
+  PROCEDURE DELETA_ALUNO (PCOD_ALUNO NUMBER); --PROCEDURE PUBLICA
+  PROCEDURE MEDIA_CONTRATOS; --PROCEDURE PUBLICA
+  PROCEDURE CON_ALUNO (PCOD_ALUNO NUMBER); --PROCEDURE PUBLICA
 END;
-/
----------
------- --Corpo
-CREATE OR REPLACE PACKAGE BODY PKG_ALUNO --Corpo
+
+--BODY
+CREATE OR REPLACE PACKAGE BODY PKG_ALUNO
 IS
- --variaveis locais
- vTESTE VARCHAR(20);
- --************
- PROCEDURE MEDIA_CONTRATOS
- IS
- BEGIN
-   vTESTE := 'teste';
-   SELECT Avg(total) INTO vMEDIA FROM tcontrato;
- END;
- --************
- PROCEDURE CON_ALUNO(pCOD_ALUNO NUMBER)
- IS
- BEGIN
-   vNOME := '';
-   SELECT NOME INTO vNOME FROM TALUNO
-   WHERE COD_ALUNO=pCOD_ALUNO;
- EXCEPTION
-   WHEN No_Data_Found THEN
-     Dbms_Output.Put_Line('Aluno não existe');
- END;
- ---*************
- PROCEDURE DELETA_ALUNO(pCOD_ALUNO NUMBER)
- IS
- BEGIN
-  CON_ALUNO(pCOD_ALUNO);
-  IF Length(vNOME) > 0 THEN
-    DELETE FROM TALUNO WHERE COD_ALUNO = pCOD_ALUNO;
-    Dbms_Output.Put_Line(vNOME||'->Excluido');
-  END IF;
- END;
-
-END;
---FIM do package
-
-
---USANDO
-EXEC PKG_ALUNO.DELETA_ALUNO(666);
-
-SELECT * FROM TALUNO;
+    VTESTE VARCHAR(20); --VARIAVEL LOCAL PRIVADA
+    
+    PROCEDURE MEDIA_CONTRATOS
+    IS
+    BEGIN
+      VTESTE := 'TESTE';
+      SELECT AVG(TOTAL)
+        INTO VMEDIA
+        FROM TCONTRATO2;
+    END;
+    
+    --CONSULTA ALUNO
+    PROCEDURE CON_ALUNO (PCOD_ALUNO NUMBER)
+    IS
+    BEGIN
+       VNOME := '';
+       SELECT NOME
+         INTO VNOME
+         FROM TALUNO2
+         WHERE COD_ALUNO = PCOD_ALUNO;
+    EXCEPTION
+      WHEN NO_DATA_FOUND THEN
+        Dbms_Output.Put_Line('Aluno não existe');
+    END;
+    
+    PROCEDURE DELETA_ALUNO (PCOD_ALUNO NUMBER)
+    IS
+    BEGIN
+    CON_ALUNO(PCOD_ALUNO);
+    IF LENGTH(VNOME) > 0 THEN
+        DELETE FROM TALUNO2
+          WHERE COD_ALUNO = PCOD_ALUNO;
+          COMMIT;
+          Dbms_Output.Put_Line('Aluno(a)' || VNOME || ' excluido(a) com sucesso!');
+    END IF;
+    END;
+END;    
 
 
+--CHAMADA PROCEDURE DELETA ALUNO
+EXEC PKG_ALUNO.DELETA_ALUNO(10);
+
+INSERT ALL 
+    INTO TALUNO2 VALUES (10,'AAAA','AAAA','1234','QW',1234,'10/02/2001')
+    INTO TALUNO2 VALUES (11,'BBBB','AAAA','1234','QW',1234,'10/02/2001')
+    SELECT * FROM DUAL;
+  
+
+SELECT * FROM TALUNO2 ORDER BY COD_ALUNO DESC;
 
 
---
+--CHAMADA PROCEDURE MEDIA CONTRATOS
 DECLARE
-  m NUMBER;
+  M NUMBER;
 BEGIN
-  pkg_aluno.media_contratos; --executa a procedure
-  m := pkg_aluno.vMedia;
-  Dbms_Output.Put_Line('Média: '||m);
+  PKG_ALUNO.MEDIA_CONTRATOS; --EXECUTA PROCEDURE
+  M := PKG_ALUNO.VMEDIA; --VMEDIA VARIAVEL PUBLICA PACKAGE
+  Dbms_Output.Put_Line('Média: ' || M);
 END;
 
 
 
---
+--CHAMADA PROCEDURE CONSULTA ALUNO
 DECLARE
-  nome VARCHAR(30);
+  NOME VARCHAR(30);
 BEGIN
-  pkg_aluno.con_aluno(89); --executa a procedure
-  nome := pkg_aluno.vnome;
-  Dbms_Output.Put_Line('Nome '||nome);
+  PKG_ALUNO.CON_ALUNO(2);
+  NOME := PKG_ALUNO.VNOME;
+  Dbms_Output.Put_Line('Nome: ' || NOME);
+END;
+--SEMELHANTES 
+BEGIN
+  PKG_ALUNO.CON_ALUNO(2);
+  Dbms_Output.Put_Line('Nome: ' || PKG_ALUNO.VNOME);
 END;
 
-
---
-BEGIN
-  pkg_aluno.con_aluno(1); --executa a procedure
-  IF (pkg_aluno.vnome <> '') THEN
-    Dbms_Output.Put_Line('Nome '||pkg_aluno.vnome);
-  END IF;
-END;
