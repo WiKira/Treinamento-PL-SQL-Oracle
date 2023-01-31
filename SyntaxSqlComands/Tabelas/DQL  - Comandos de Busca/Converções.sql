@@ -1,5 +1,6 @@
 
 --TO_CHAR: https://sites.google.com/site/oradicas/funcoes/funcoes-de-conversao/to_char
+--OBS: (OS PARAMETROS DAY E MONTH RETORNAM UM ESPAÇO APÓS SEU VALOR RESULTANTE)
 
 --Converter date to string, exibindo apenas as informações necessárias
 SELECT TO_CHAR(SYSDATE,'DD')
