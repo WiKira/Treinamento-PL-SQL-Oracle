@@ -15,3 +15,5 @@ DROP PACKAGE NOME_PACKAGE;
 
 --DROP BODY
 DROP PACKAGE BODY NOME_PACKAGE;
+
+--EXEMPLOS DE PACKAGES: C:\Users\Hino\Documents\Treinamento SQL - Oracle\Projetos\Projeto 2 - Material Udemy\Editor\Comandos PL-SQL\CAP22_PACKAGES
